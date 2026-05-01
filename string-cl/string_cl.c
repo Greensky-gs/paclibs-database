@@ -26,6 +26,19 @@ void stringcl_destroy(stringcl_cell * list) {
 	}
 	*list = NULL;
 }
+void stringcl_destroy_nofree(stringcl_cell * list) {
+	if (list == NULL) return;
+
+	stringcl_cell current = *list;
+	while (current != NULL) {
+		stringcl_cell next = current->next;
+
+		free(current);
+
+		current = next;
+	}
+	*list = NULL;
+}
 unsigned long int stringcl_size(stringcl_cell list) {
 	unsigned long int size = 0;
 	stringcl_cell current = list;
