@@ -1,2 +1,4 @@
 [deps]
 streq
+[features]
+array
