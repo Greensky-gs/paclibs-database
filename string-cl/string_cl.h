@@ -17,4 +17,6 @@ extern int stringcl_remove(stringcl_cell *, char *);
 extern int stringcl_removep(stringcl_cell *, stringcl_cell);
 extern void stringcl_foreach(stringcl_cell, void *, void callback(stringcl_cell, void *));
 
+extern char ** stringcl_into_array(stringcl_cell, unsigned long *);
+
 #endif
