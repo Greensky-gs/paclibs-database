@@ -9,7 +9,7 @@ typedef struct st_chained_cell * stringcl_cell;
 
 extern stringcl_cell stringcl_create(char *);
 extern void stringcl_destroy(stringcl_cell *);
-extern unsigned long int strincl_size(stringcl_cell);
+extern unsigned long int stringcl_size(stringcl_cell);
 extern int stringcl_append(stringcl_cell *, char *);
 extern int stringcl_exists(stringcl_cell, char *);
 extern int stringcl_remove(stringcl_cell *, char *);
