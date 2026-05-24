@@ -60,6 +60,7 @@ unsigned int parse_uint(char * val, int * control) {
 		i++;
 	}
 
+	SET_CTR(control, 0)
 	return base;
 }
 
