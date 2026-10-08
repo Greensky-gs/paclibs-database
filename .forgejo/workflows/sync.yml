@@ -1,10 +1,3 @@
-name: Mirror main to mirror branch
-
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   mirror:
     runs-on: ubuntu-latest
@@ -39,6 +32,16 @@ jobs:
             git rm -f "$WORKFLOW_FILE" || true
           fi
 
+      - name: Commit changes on mirror
+        run: |
+          # S'assurer qu'on est bien sur mirror
+          git checkout mirror
+
+          # Commit même s'il n'y a que des suppressions
+          git add -A
+          git commit -m "Sync main -> mirror (without README and workflow)" \
+            || git commit --allow-empty -m "Sync main -> mirror (no changes)"
+
       - name: Push to mirror branch
         env:
           FORGEJO_TOKEN: ${{ secrets.WRITE_REPO_TOKEN }}
@@ -47,4 +50,4 @@ jobs:
           AUTH_URL=$(echo "$REMOTE_URL" | sed -E 's#^(https?://)#\1${FORGEJO_TOKEN}:@#')
           git remote set-url origin "$AUTH_URL"
 
-          git push origin mirror --force 
+          git push --force origin HEAD:mirror
