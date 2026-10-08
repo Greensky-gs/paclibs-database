@@ -19,12 +19,15 @@ jobs:
           git config user.name "Forgejo Actions"
           git config user.email "actions@forgejo.local"
 
-      - name: Prepare mirror branch
+      - name: Create / update mirror branch locally
         run: |
-          if git show-ref --verify --quiet refs/heads/mirror; then
+          # Si mirror existe en remote, on la récupère
+          if git ls-remote --exit-code --heads origin mirror >/dev/null 2>&1; then
+            git fetch origin mirror
             git checkout mirror
             git merge --no-edit main
           else
+            # Sinon, on crée une branche orphan à partir de main
             git checkout --orphan mirror
           fi
 
@@ -41,11 +44,9 @@ jobs:
 
       - name: Commit changes on mirror
         run: |
-          # S'assurer qu'on est bien sur mirror
-          git checkout mirror
-
-          # Commit même s'il n'y a que des suppressions
+          # On est déjà sur mirror
           git add -A
+          # Commit même si seulement des suppressions
           git commit -m "Sync main -> mirror (without README and workflow)" \
             || git commit --allow-empty -m "Sync main -> mirror (no changes)"
 
