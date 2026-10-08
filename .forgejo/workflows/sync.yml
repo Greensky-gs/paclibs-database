@@ -1,0 +1,46 @@
+name: Mirror main to mirror branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git user
+        run: |
+          git config user.name "Forgejo Actions"
+          git config user.email "actions@forgejo.local"
+
+      - name: Prepare mirror branch
+        run: |
+          if git show-ref --verify --quiet refs/heads/mirror; then
+            git checkout mirror
+            git merge --no-edit main
+          else
+            git checkout --orphan mirror
+          fi
+
+      - name: Remove unwanted files
+        run: |
+          if [ -f README.md ]; then
+            git rm -f README.md || true
+          fi
+
+          WORKFLOW_FILE=".forgejo/workflows/sync.yml"
+          if [ -f "$WORKFLOW_FILE" ]; then
+            git rm -f "$WORKFLOW_FILE" || true
+          fi
+
+      - name: Push to mirror branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.WRITE_REPO_TOKEN }}
+        run: |
+          git push origin mirror --force
