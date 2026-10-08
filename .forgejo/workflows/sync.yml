@@ -41,6 +41,10 @@ jobs:
 
       - name: Push to mirror branch
         env:
-          GITHUB_TOKEN: ${{ secrets.WRITE_REPO_TOKEN }}
+          FORGEJO_TOKEN: ${{ secrets.WRITE_REPO_TOKEN }}
         run: |
-          git push origin mirror --force
+          REMOTE_URL=$(git remote get-url origin)
+          AUTH_URL=$(echo "$REMOTE_URL" | sed -E 's#^(https?://)#\1${FORGEJO_TOKEN}:@#')
+          git remote set-url origin "$AUTH_URL"
+
+          git push origin mirror --force 
