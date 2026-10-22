@@ -21,15 +21,14 @@ jobs:
 
       - name: Create / update mirror branch locally
         run: |
-          # Si mirror existe en remote, on la récupère
-          if git ls-remote --exit-code --heads origin mirror >/dev/null 2>&1; then
-            git fetch origin mirror
-            git checkout mirror
-            git merge --no-edit main
-          else
-            # Sinon, on crée une branche orphan à partir de main
-            git checkout --orphan mirror
-          fi
+          git checkout main
+
+          git checkout --orphan mirror
+
+          git rm -rf --cached . >/dev/null 2>&1 || true
+          git clean -fdx >/dev/null 2>&1 || true
+
+          git checkout main -- .
 
       - name: Remove unwanted files
         run: |
@@ -44,9 +43,7 @@ jobs:
 
       - name: Commit changes on mirror
         run: |
-          # On est déjà sur mirror
           git add -A
-          # Commit même si seulement des suppressions
           git commit -m "Sync main -> mirror (without README and workflow)" \
             || git commit --allow-empty -m "Sync main -> mirror (no changes)"
 
