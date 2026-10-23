@@ -57,8 +57,8 @@ int find_all(int argc, char * argv[], struct arg_input args[], int size) {
 					found += args[j].found = 1;
 					break;
 				case Int:
-					if (i == argc - 2) break;
-					args[j].found = parse_int(argv[i + 1], &(args[j].int_res));
+					if (i == argc - 1) break;
+					args[j].int_res = parse_int(argv[i + 1], &(args[j].int_res));
 					found += args[j].found;
 					break;
 				case String:
