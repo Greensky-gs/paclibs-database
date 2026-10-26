@@ -8,12 +8,18 @@ typedef enum {
 	Error = 3,
 } recursion_result_t;
 
+typedef struct {
+  int use_lstat;
+  int do_perror;
+} recurse_config_t;
+
 extern recursion_result_t recursion(
 	char * path,
 	void * file_data,
 	void file_callback(char * path, void *),
 	void * dir_data,
-	void dir_callback(char * path, void *)
+	void dir_callback(char * path, void *),
+  recurse_config_t * config
 );
 
 #endif

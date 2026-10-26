@@ -6,6 +6,8 @@
 #include <string.h>
 #include <sys/stat.h>
 
+#define GET_PARAM(config, param, def) (config == NULL ? (def) : ((config)->param))
+
 static int is_sys_path(char * a) {
 	if (a == NULL) return 0;
 	if (*a == 0) return 0;
@@ -33,7 +35,8 @@ recursion_result_t recursion(
 	void * file_data,
 	void file_callback(char *, void *),
 	void * dir_data,
-	void dir_callback(char *, void *)
+	void dir_callback(char *, void *),
+  recurse_config_t * config
 ) {
 	DIR * dir;
 	if ((dir = opendir(path)) == NULL) {
@@ -55,8 +58,8 @@ recursion_result_t recursion(
 		}
 
 		concat(newpath, path, entry->d_name);
-		if (stat(newpath, &sb) == -1) {
-			perror("stat");
+		if ((GET_PARAM(config, use_lstat, 0) == 1 ? lstat(newpath, &sb)  : stat(newpath, &sb)) == -1) {
+			if (GET_PARAM(config, do_perror, 1)) perror("stat");
 			errno = 0;
 			free(newpath);
 			continue;
@@ -64,7 +67,7 @@ recursion_result_t recursion(
 	
 		if (S_ISDIR(sb.st_mode)) {
 			if (dir_callback != NULL) dir_callback(newpath, dir_data);
-			recursion(newpath, file_data, file_callback, dir_data, dir_callback);
+			recursion(newpath, file_data, file_callback, dir_data, dir_callback, config);
 		} else if (S_ISREG(sb.st_mode)) {
 			if (file_callback != NULL) file_callback(newpath, file_data);
 		}
@@ -79,3 +82,5 @@ recursion_result_t recursion(
 	closedir(dir);
 	return Ok;
 }
+
+#undef GET_PARAM
