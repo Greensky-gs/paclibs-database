@@ -1,0 +1,3 @@
+[deps]
+streq
+parse_int
