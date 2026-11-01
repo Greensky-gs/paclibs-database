@@ -23,4 +23,10 @@ extern int get_int(int, char *[], char *, int *);
 
 extern int find_all(int argc, char *[], struct arg_input [], int size);
 
+#ifdef __has_include
+#if __has_include("presenting/presenting.c")
+extern void display_args(int args_count, struct arg_input args[]);
+#endif
+#endif
+
 #endif
