@@ -10,13 +10,11 @@ BIN_DIR=bin
 
 NAME=main.uwu
 
-SOURCES_REG=$(wildcard $(SRC_DIR)/*.c)
-SOURCES_DIR=$(wildcard $(SRC_DIR)/*/)
-SOURCES_IND=$(wildcard $(SRC_DIR)/*/*.c)
+SOURCES := $(wildcard $(SRC_DIR)/*.c) \
+           $(wildcard $(SRC_DIR)/*/*.c) \
+           $(wildcard $(SRC_DIR)/*/*/*.c)
 
-SOURCES=$(SOURCES_REG) $(SOURCES_IND)
-
-BUILD_DIRS=$(SOURCES_DIR:$(SRC_DIR)/%/=$(BUILD_DIR)/%/)
+BUILD_DIRS := $(sort $(dir $(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SOURCES))))
 OBJECTS=$(SOURCES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 INT_VARS :=
