@@ -3,5 +3,6 @@
 
 extern int streq(char *, char *);
 extern char * join(char *, char *);
+extern int starts_with(const char * input, const char * with);
 
 #endif

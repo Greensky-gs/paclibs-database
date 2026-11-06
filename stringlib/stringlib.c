@@ -35,3 +35,14 @@ char * join(char * a, char * b) {
 	joined[size] = 0;
 	return joined;
 }
+
+int starts_with(const char * input, const char * with) {
+  while (*input != 0 && *with != 0) {
+    if (*input != *with) return 0;
+    input++;
+    with++;
+  }
+  if (*input == 0 && *with != 0) return 0;
+  return 1;
+}
+
