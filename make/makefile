@@ -28,10 +28,10 @@ MACRO_FLAGS := $(strip $(foreach v,$(VARS),\
 all: $(BUILD_DIR) $(BUILD_DIRS) $(BIN_DIR)/$(NAME)
 
 $(BIN_DIR)/$(NAME): $(BIN_DIR) $(OBJECTS)
-	$(CC) $(OBJECTS) $(FLAGS) $(LIBS_FLAG) $(SANTS) $(MACRO_FLAGS) -o $(BIN_DIR)/$(NAME)
+	$(CC) $(OBJECTS) $(strip $(FLAGS) $(LIBS_FLAG) $(SANTS) $(MACRO_FLAGS)) -o $(BIN_DIR)/$(NAME)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(FLAGS) $(LIBS_FLAG) $(MACRO_FLAGS) $^ -o $@ -c
+	$(CC) $(strip $(FLAGS) $(LIBS_FLAG) $(MACRO_FLAGS)) $^ -o $@ -c
 
 $(BUILD_DIRS): $(BUILD_DIR)
 	mkdir -p "$@"
