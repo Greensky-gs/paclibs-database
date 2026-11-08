@@ -45,4 +45,17 @@ int starts_with(const char * input, const char * with) {
   if (*input == 0 && *with != 0) return 0;
   return 1;
 }
+int streq_with_crumb(const char * src, const char * cmp, const char crumb) {
+  while (*src != 0 && *cmp != 0) {
+    if (*src != *cmp) return 0;
+    src++;
+    cmp++;
+  }
+  if (*src == 0 && *cmp != 0) return 0;
+  while (*src != 0) {
+    if (*src != crumb) return 0;
+    src++;
+  }
+  return 1;
+}
 
