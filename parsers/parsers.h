@@ -37,6 +37,21 @@ extern long int parse_lint(char *, int *);
 extern unsigned long int parse_ulint(char *, int *);
 
 /**
+ * @brief Converts string to long int
+ *
+ * @param char * - the input
+ * @param int * - indicates an error. Set to 0 if everything went fine, set to the values of ParsersControls
+ */
+extern long long int parse_llint(char *, int *);
+/**
+ * @brief Converts string to unsigned long long int
+ *
+ * @param char * - the input
+ * @param int * - indicates an error. Set to 0 if everything went fine, set to the values of ParsersControls
+ */
+extern unsigned long long int parse_ullint(char *, int *);
+
+/**
  * @brief Converts string to short int
  *
  * @param char * - the input

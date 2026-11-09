@@ -122,6 +122,64 @@ unsigned long int parse_ulint(char * val, int * control) {
 	return base;
 }
 
+long long int parse_llint(char * val, int * control) {
+	long long int base = 0;
+	long long int verif = 0;
+
+	int i = 0;
+	int coef = 1;
+	if (val[0] == '-') {
+		i++;
+		coef = -1;
+	} else if (val[0] == '+') i++;
+	while (val[i] != 0) {
+		if (!ISC_NMC(val[i])) {
+			SET_CTR(control, InvalidInput);
+			return 0;
+		}
+
+		BAS_OPE(base, val[i] - 48, coef);
+
+    if (!BAS_COM(base, verif, coef)) {
+      SET_CTR(control, OverFlow);
+      return 0;
+    }
+    i++;
+    verif = base;
+  }
+
+  SET_CTR(control, 0);
+  return base;
+}
+
+unsigned long long int parse_ullint(char * val, int * control) {
+	// The number can only be positive, so we don't need to check the sign and
+	// act accordingly. Thus the sign will be ignored.
+	unsigned long long int base = 0;
+	unsigned long long int verif = 0;
+
+	int i = 0;
+	if (val[0] == '-' || val[0] == '+') i++;
+
+  while (val[i] != 0) {
+    if (!ISC_NMC(val[i])) {
+      SET_CTR(control, InvalidInput);
+      return 0;
+    }
+
+    base = base * 10 + val[i] - 48;
+    if (base < verif) {
+      SET_CTR(control, OverFlow);
+      return 0;
+    }
+    verif = base;
+    i++;
+  }
+
+	SET_CTR(control, 0)
+	return base;
+}
+
 short int parse_sint(char * val, int * control) {
 	short int base = 0;
 	short int verif = 0;
