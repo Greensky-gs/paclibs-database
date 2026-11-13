@@ -82,7 +82,7 @@
 #ifdef DBG_NO_DCOL
 #define __DEBUG_PREFIX
 #else
-#define __DEBUG_PREFIX printf(DBG_GREEN);
+#define __DEBUG_PREFIX DBG_GREEN
 #endif
 
 #ifdef DBG_CLOCK
@@ -118,8 +118,7 @@
 #define DEBUG(...) {\
   __DEBUG_CLOCK\
   __DBG_POS\
-  __DEBUG_PREFIX\
-  printf(__VA_ARGS__);\
+  printf(__DEBUG_PREFIX __VA_ARGS__);\
   printf(DBG_RESET "\n");\
 }
 
