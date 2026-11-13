@@ -15,9 +15,14 @@ jobs:
           fetch-depth: 0
 
       - name: Configure git user
+        id: config
+        env:
+          REPO: ${{ github.repository }}
         run: |
           git config user.name "Forgejo Actions"
           git config user.email "actions@forgejo.local"
+
+          printf '`%s`' "${REPO#*/}" >> "$GITHUB_OUTPUT"
 
       - name: Create / update mirror branch locally
         run: |
@@ -56,3 +61,19 @@ jobs:
           git remote set-url origin "$AUTH_URL"
 
           git push --force origin HEAD:mirror
+
+      - name: Send webhook data
+        uses: ./.forgejo/actions/discord-notify
+        with:
+          webhook_url: ${{ secrets.webhook_url }}
+          bot_name: ${{ github.repository }}
+          title: 'Mirror synchronized'
+          title_url: ${{ github.server_url }}/${{ github.repository }}
+          color: '1896637'
+          footer_text: 'Forgejo Actions'
+          footer_icon_url: 'https://git.greensky.tf/Greensky/assets/raw/commit/82192bec488323e1c988f38d9043b71e1aed0f88/logos/forgejo/logo.png'
+          bot_avatar_url: 'https://git.greensky.tf/Greensky/assets/raw/commit/091acdcdd021a2750e2ee9d4877ef715656dc8a5/avatars/mirror.png'
+          description: |
+            The [${{ steps.config.outputs.repo }}](${{ github.server_url }}/${{ github.repository }}) repository synced its [**pacboy Mirror**](${{ github.server_url }}/${{ github.repository }}/src/branch/mirror)
+
+            See [`pacboy`](${{ github.server_url }}/Greensky/pacboy)
