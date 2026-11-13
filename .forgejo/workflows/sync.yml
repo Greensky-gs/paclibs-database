@@ -7,7 +7,7 @@ on:
 
 jobs:
   mirror:
-    runs-on: ubuntu-latest
+    runs-on: arch
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,9 +22,9 @@ jobs:
           git config user.name "Forgejo Actions"
           git config user.email "actions@forgejo.local"
 
-          printf '`%s`' "${REPO#*/}" >> "$GITHUB_OUTPUT"
+          printf 'repo=`%s`' "${REPO#*/}" >> "$GITHUB_OUTPUT"
 
-          apt-get install -y jq
+          pacman -Sy --noconfirm jq
 
       - name: Create / update mirror branch locally
         run: |
