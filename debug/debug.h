@@ -3,8 +3,33 @@
 
 #include <stdio.h>
 
-// This defines debug symbols
-// Add a variable "NODEBUG" to disable all debug symbols (or DISABLE_DEBUG, since it is by default in my makefile)
+/*    DEBUG HEADER
+ * this file can be included to have debug symbols. It can be controlled with the definition of certain macros. Hence :
+ *
+ * Including the following macros will have this effect :
+ * - DBG_NO_COL : disable prefixing color by default of the DEBUG macro. By default, it is preceeded in green
+ * - DBG_CLOCK : This will prefix the DEBUG with a clock of the real time. It is colored in purple
+ * - DBG_POSITION : Insert before the clock a string with the file name and the line of the DEBUG macro
+ * - NODEBUG or DISABLE_DEBUG : Disable the definition of the color macros. Replaces the DEBUG macro with an empty macro, effectively disabling all macro definition
+ *
+ * Here is how to use the DEBUG macro :
+ * It is constructed with variadic arguments, that will replace the __VA_ARGS__ in printf(__PREFIX __VA_ARGS__); instruction
+ * Which means, that inputing DEBUG("Message") will result in printf(__PREFIX "Message"); and to print a variable, it can be done by doing :
+ * DEBUG("pointer : %p", *doubleptr);, that would result in : printf(__PREFIX "Pointer : %p", *doubleptr);
+ *
+ * Here's how to use color macros :
+ * - Prefix everything with DBG_ and write in uppercase
+ * - Formatting :
+ *    bold, italic, underline and blink form color variables, and are not mutually exclusive
+ * - Coloring :
+ *   - All the following colors are available : black, green, yellow, red, blue, purple, cyan
+ *   - You can prefix the color with LIGHT_ to get the light variable
+ *   - You can suffix the DBG_ with BG_ to get the matching background color
+ *   - DBG_RESET is a variable to reset all coloring
+ * - Examples :
+ *   DEBUG("this is green" DBG_RED " and this is red");
+ *   DEBUG(DBG_BG_LIGHT_CYAN "HEADER : " DBG_LIGHT_RED "%s", string);
+ */
 
 #if !defined(NODEBUG) && !defined(DISABLE_DEBUG)
 
