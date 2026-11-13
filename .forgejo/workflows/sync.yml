@@ -67,7 +67,7 @@ jobs:
       - name: Send webhook data
         uses: ./.forgejo/actions/discord-notify
         with:
-          webhook_url: ${{ secrets.webhook_url }}
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           bot_name: ${{ github.repository }}
           title: 'Mirror synchronized'
           title_url: ${{ github.server_url }}/${{ github.repository }}
