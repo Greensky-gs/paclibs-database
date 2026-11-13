@@ -24,6 +24,8 @@ jobs:
 
           printf '`%s`' "${REPO#*/}" >> "$GITHUB_OUTPUT"
 
+          apt-get install -y jq
+
       - name: Create / update mirror branch locally
         run: |
           git checkout main
