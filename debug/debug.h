@@ -72,6 +72,12 @@
 #define __DEBUG_CLOCK
 #endif
 
+#ifdef DBG_POSITION
+#define __DBG_POS printf(DBG_GRAY __FILE__ ":%d | " DBG_RESET, __LINE__);
+#else
+#define __DBG_POS
+#endif
+
 /*
  * This macro takes an arbitrary number of arguments. It will format it as such :
  * printf(first_argument, ...) everything else
@@ -80,14 +86,20 @@
  *
  * By default, a clock is not enabled. You can enable the default clock by defining the DBG_CLOCK variable
  *
+ * By default, the filename is disabled, but it can appear if the macro DBG_POSITION is defined
+ *
  * It will always reset the color and print a newline afterwards
  */
 #define DEBUG(...) {\
   __DEBUG_CLOCK\
+  __DBG_POS\
   __DEBUG_PREFIX\
   printf(__VA_ARGS__);\
   printf(DBG_RESET "\n");\
 }
+
+#define DEBUG_INT_VAR(var) DEBUG(#var " : %d ", var)
+#define DEBUG_LINT_VAR(var) DEBUG(#var " : %ld ", var)
 
 
 /*
